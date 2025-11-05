@@ -1,0 +1,177 @@
+/* Algemene stijl */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f6f8;
+    margin: 40px;
+    color: #333;
+}
+
+/* Titels */
+h1, h2, h3 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+/* Formuliercontainer */
+div {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-width: 1000px;
+    margin: 0 auto 40px auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* Labels en dropdowns */
+label {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+select {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    min-width: 180px;
+    background-color: #fff;
+    font-size: 14px;
+}
+
+/* Toevoegknop */
+button {
+    background-color: #125079;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #125079;
+}
+
+/* Hoofd-tabel stijl */
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th {
+    background-color: #125079;
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-size: 16px;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+/* Actieknoppen in de tabel */
+td button {
+    background-color: #2ecc71;
+    margin-right: 5px;
+}
+
+td button:last-child {
+    background-color: #e74c3c;
+}
+
+td button:hover {
+    opacity: 0.9;
+}
+
+/* Porto-sectie netjes onder hoofd-tabel */
+#portoSectie {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+    gap: 30px;
+    margin-top: 20px;
+    padding: 0 20px;
+    align-items: start;
+}
+
+/* Porto-box styling */
+#portoSectie > div {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    min-height: 200px;
+}
+
+/* Porto-tabel stijl */
+#portoSectie table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#portoSectie th {
+    background-color: #125079;
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+
+#portoSectie td {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+}
+.porto-card {
+  background: var(--card);
+  padding: 12px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  min-height: 170px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.porto-card h3 { margin: 0 0 6px 0; }
+.porto-card label { font-weight: 600; margin-right: 6px; }
+.melding-label { font-style: italic; color: var(--muted); margin: 4px 0 8px 0; }
+
+.porto-card table {
+  width: 100%;
+  border-collapse: collapse;
+  background: transparent;
+  box-shadow: none;
+}
+
+.porto-card th {
+  background: var(--primary);
+  color: #fff;
+  padding: 8px;
+  font-size: 13px;
+  text-align: left;
+}
+
+.porto-card td {
+  padding: 1px;
+  border-bottom: 1px solid #eee;
+  font-size: 13px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 700px) {
+  .form-card { padding: 12px; gap: 8px; }
+  .form-card select { min-width: 140px; }
+  body { margin: 12px; }
+}
