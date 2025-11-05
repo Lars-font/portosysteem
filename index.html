@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <title>Koppelsysteem met Porto's</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Koppelsysteem met Porto's</h1>
+
+  <div class="form-card" aria-label="formulier">
+    <label for="persoon1">Naam 1:</label>
+    <select id="persoon1" aria-label="persoon1"></select>
+
+    <label for="persoon2">Naam 2:</label>
+    <select id="persoon2" aria-label="persoon2"></select>
+
+    <label for="specialisatie">Specialisatie:</label>
+    <select id="specialisatie" aria-label="specialisatie">
+      <option value="">-- Kies een specialisatie --</option>
+      <option>noodhulp</option>
+      <option>verkeerspolitie</option>
+      <option>motor</option>
+      <option>unmarked</option>
+      <option>recherche</option>
+      <option>DSI</option>
+    </select>
+
+    <label for="porto">Porto:</label>
+    <select id="porto" aria-label="porto">
+      <option value="">-- Kies een porto --</option>
+      <option>Porto 1</option>
+      <option>Porto 2</option>
+      <option>Porto 4</option>
+      <option>Porto 5</option>
+    </select>
+
+    <button onclick="voegKoppelToe()">Toevoegen</button>
+  </div>
+
+  <h2>Alle koppels</h2>
+  <div class="table-wrap">
+    <table id="koppelTabel" aria-label="koppeltabel">
+      <thead>
+        <tr>
+          <th>Naam</th>
+          <th>Partner</th>
+          <th>Specialisatie</th>
+          <th>Porto</th>
+          <th>Acties</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <h2>Porto-overzicht</h2>
+  <div id="portoSectie">
+    <div class="porto-card">
+      <h3>Porto 1</h3>
+      <label for="melding1">Melding:</label>
+      <select id="melding1" onchange="updateMeldingLabel('1')"></select>
+      <p id="meldingLabel1" class="melding-label"></p>
+      <table id="porto1"><thead><tr><th>Naam</th><th>Partner</th></tr></thead><tbody></tbody></table>
+    </div>
+
+    <div class="porto-card">
+      <h3>Porto 2</h3>
+      <label for="melding2">Melding:</label>
+      <select id="melding2" onchange="updateMeldingLabel('2')"></select>
+      <p id="meldingLabel2" class="melding-label"></p>
+      <table id="porto2"><thead><tr><th>Naam</th><th>Partner</th></tr></thead><tbody></tbody></table>
+    </div>
+
+    <div class="porto-card">
+      <h3>Porto 4</h3>
+      <label for="melding4">Melding:</label>
+      <select id="melding4" onchange="updateMeldingLabel('4')"></select>
+      <p id="meldingLabel4" class="melding-label"></p>
+      <table id="porto4"><thead><tr><th>Naam</th><th>Partner</th></tr></thead><tbody></tbody></table>
+    </div>
+
+    <div class="porto-card">
+      <h3>Porto 5</h3>
+      <label for="melding5">Melding:</label>
+      <select id="melding5" onchange="updateMeldingLabel('5')"></select>
+      <p id="meldingLabel5" class="melding-label"></p>
+      <table id="porto5"><thead><tr><th>Naam</th><th>Partner</th></tr></thead><tbody></tbody></table>
+    </div>
+  </div>
+
+  <script>
+    /* Data */
+    const namen = [
+      "32-01 Joost Huijsman","32-02 Dominic Quatar","32-05 Jan Willem","32-11 Joey Barneveld",
+      "32-17 Harry Bak","32-18 Jordy Kleine","32-19 Quinten Verkerk","32-21 Alex Beek",
+      "32-22 Kenny Boeijen","32-23 Midas Garcia","32-26 John Hendirks","32-27 Jaimy D.S.",
+      "32-28 Missy Barneveld","32-29 Owen Velt","32-30 Favian Corleone","32-38 Kunnie Boeijen",
+      "32-39 Peter Henk","32-40 Tijs Pietersen","32-41 Izzy van Gisteren","32-42 Alfie Brouwer",
+      "32-43 Wesley Bliksem","32-44 Kees Stegermans","32-46 Roderick Kakker","32-48 Barry Badjas",
+      "32-50 Robbie van Boven","32-53 Jimmy VDR","32-54 Henri Force","32-56 Xander Wilgentak",
+      "32-59 Fred Ringmans","32-60 Donny Dekker","32-61 Joran B"
+    ];
+
+    const meldingen = [
+      "atm","winkel","juwelier","kleine bank","grote bank","voertuigdiefstal",
+      "verdachte situatie burger","kleine drugsverkoop","grote drugsverkoop",
+      "jacht","booreiland","waardetransport","medische melding",
+      "server gebouw","warehouse","woninginbraak"
+    ];
+
+    /* Helpers: vul opties voor naam-dropdowns */
+    function vulDropdown(id, geselecteerd = "") {
+      const select = document.getElementById(id);
+      select.innerHTML = '<option value="">-- Kies een naam --</option>';
+      namen.forEach(naam => {
+        const opt = document.createElement('option');
+        opt.value = naam;
+        opt.textContent = naam;
+        if (naam === geselecteerd) opt.selected = true;
+        select.appendChild(opt);
+      });
+    }
+
+    /* Helpers: vul melding-dropdowns boven porto's */
+    function vulMeldingDropdowns() {
+      ['1','2','4','5'].forEach(nr => {
+        const sel = document.getElementById('melding' + nr);
+        sel.innerHTML = '<option value="">-- Kies een melding --</option>';
+        meldingen.forEach(m => {
+          const opt = document.createElement('option');
+          opt.value = m;
+          opt.textContent = m;
+          sel.appendChild(opt);
+        });
+      });
+    }
+
+    function updateMeldingLabel(nr) {
+      const sel = document.getElementById('melding' + nr);
+      const lbl = document.getElementById('meldingLabel' + nr);
+      lbl.textContent = sel.value ? `Actieve melding: ${sel.value}` : '';
+    }
+
+    /* Init dropdowns */
+    vulDropdown('persoon1');
+    vulDropdown('persoon2');
+    vulMeldingDropdowns();
+
+    /* Main: toevoegen koppel */
+    function voegKoppelToe() {
+      const naam1 = document.getElementById('persoon1').value;
+      const naam2 = document.getElementById('persoon2').value;
+      const specialisatie = document.getElementById('specialisatie').value;
+      const porto = document.getElementById('porto').value;
+
+      if (!naam1 || !naam2 || naam1 === naam2 || !specialisatie || !porto) {
+        alert('Vul alle velden correct in.');
+        return;
+      }
+
+      const tbody = document.getElementById('koppelTabel').querySelector('tbody');
+      const tr = tbody.insertRow();
+      tr.insertCell(0).textContent = naam1;
+      tr.insertCell(1).textContent = naam2;
+      tr.insertCell(2).textContent = specialisatie;
+      tr.insertCell(3).textContent = porto;
+      tr.insertCell(4).innerHTML = `
+        <div class="actions">
+          <button class="btn-edit" onclick="bewerkRij(this)">Bewerk</button>
+          <button class="btn-delete" onclick="verwijderRij(this)">Verwijder</button>
+        </div>
+      `;
+
+      voegToeAanPorto(porto, naam1, naam2);
+
+      // reset form controls
+      document.getElementById('persoon1').value = '';
+      document.getElementById('persoon2').value = '';
+      document.getElementById('specialisatie').value = '';
+      document.getElementById('porto').value = '';
+    }
+
+    /* Maak dropdown HTML van een array */
+    function maakDropdown(opties, geselecteerd) {
+      let html = '<select>';
+      opties.forEach(o => {
+        html += `<option${o === geselecteerd ? ' selected' : ''}>${o}</option>`;
+      });
+      html += '</select>';
+      return html;
+    }
+
+    /* Bewerk rij (zet cellen om naar selects). Bewaar oude waarden in dataset */
+    function bewerkRij(knop) {
+      const tr = knop.closest('tr');
+
+      // bewaar oude waarden
+      tr.dataset.oudeNaam1 = tr.cells[0].textContent;
+      tr.dataset.oudeNaam2 = tr.cells[1].textContent;
+      tr.dataset.oudePorto = tr.cells[3].textContent;
+      tr.dataset.oudeSpecialisatie = tr.cells[2].textContent;
+
+      // zet selects
+      tr.cells[0].innerHTML = maakDropdown(namen, tr.dataset.oudeNaam1);
+      tr.cells[1].innerHTML = maakDropdown(namen, tr.dataset.oudeNaam2);
+      tr.cells[2].innerHTML = maakDropdown(["noodhulp","verkeerspolitie","motor","unmarked","recherche","DSI"], tr.dataset.oudeSpecialisatie);
+      tr.cells[3].innerHTML = maakDropdown(["Porto 1","Porto 2","Porto 4","Porto 5"], tr.dataset.oudePorto);
+
+      // zorg dat actieknop opslaan toont
+      tr.cells[4].innerHTML = `<button class="btn-save" onclick="opslaanRij(this)">Opslaan</button>`;
+    }
+
+    /* Opslaan bewerkte rij: update hoofd-tabel en porto-tabellen */
+    function opslaanRij(knop) {
+      const tr = knop.closest('tr');
+
+      const oudeNaam1 = tr.dataset.oudeNaam1;
+      const oudeNaam2 = tr.dataset.oudeNaam2;
+      const oudePorto = tr.dataset.oudePorto;
+
+      const naam1 = tr.cells[0].querySelector('select').value;
+      const naam2 = tr.cells[1].querySelector('select').value;
+      const specialisatie = tr.cells[2].querySelector('select').value;
+      const porto = tr.cells[3].querySelector('select').value;
+
+      if (!naam1 || !naam2 || naam1 === naam2 || !specialisatie || !porto) {
+        alert('Vul alle velden correct in.');
+        return;
+      }
+
+      // update hoofd-tabel cellen
+      tr.cells[0].textContent = naam1;
+      tr.cells[1].textContent = naam2;
+      tr.cells[2].textContent = specialisatie;
+      tr.cells[3].textContent = porto;
+
+      // terug naar normale actieknoppen
+      tr.cells[4].innerHTML = `
+        <div class="actions">
+          <button class="btn-edit" onclick="bewerkRij(this)">Bewerk</button>
+          <button class="btn-delete" onclick="verwijderRij(this)">Verwijder</button>
+        </div>
+      `;
+
+      // update porto-tabellen: verwijder uit oude en voeg toe aan nieuwe (als veranderd)
+      verwijderUitPorto(oudePorto, oudeNaam1, oudeNaam2);
+      voegToeAanPorto(porto, naam1, naam2);
+
+      // cleanup dataset
+      delete tr.dataset.oudeNaam1;
+      delete tr.dataset.oudeNaam2;
+      delete tr.dataset.oudePorto;
+      delete tr.dataset.oudeSpecialisatie;
+    }
+
+    /* Verwijder rij uit hoofd-tabel en porto-tabel */
+    function verwijderRij(knop) {
+      const tr = knop.closest('tr');
+      const porto = tr.cells[3].textContent;
+      const naam1 = tr.cells[0].textContent;
+      const naam2 = tr.cells[1].textContent;
+
+      verwijderUitPorto(porto, naam1, naam2);
+      tr.remove();
+    }
+
+    /* Voeg koppel toe aan porto-tabel (onderaan) */
+    function voegToeAanPorto(porto, naam1, naam2) {
+      if (!porto) return;
+      const portoId = porto.toLowerCase().replace(/\s+/g, '');
+      const tabel = document.getElementById(portoId);
+      if (!tabel) return;
+      const tbody = tabel.querySelector('tbody');
+      const r = tbody.insertRow();
+      r.insertCell(0).textContent = naam1;
+      r.insertCell(1).textContent = naam2;
+    }
+
+    /* Zoek en verwijder koppel uit porto-tabel */
+    function verwijderUitPorto(porto, naam1, naam2) {
+      if (!porto) return;
+      const portoId = porto.toLowerCase().replace(/\s+/g, '');
+      const tabel = document.getElementById(portoId);
+      if (!tabel) return;
+      const tbody = tabel.querySelector('tbody');
+      const rijen = Array.from(tbody.rows);
+      for (let i = 0; i < rijen.length; i++) {
+        const c0 = rijen[i].cells[0]?.textContent;
+        const c1 = rijen[i].cells[1]?.textContent;
+        if (c0 === naam1 && c1 === naam2) {
+          tbody.deleteRow(i);
+          return;
+        }
+      }
+    }
+  </script>
+</body>
+</html>
